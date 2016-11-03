@@ -1,0 +1,46 @@
+This is the "slightly adapted" source from section 8.7 "Example -- A Storage
+Allocator". Page 185-189 from the book "The C Programming Language (second
+edition)" by Brian W.  Kernighan and Dennis M. Ritchie. See section_8.7.pdf.
+
+The purpose of this source is to "test" the storage allocator presented. It
+randomly allocates and frees memory, up until the end of the Universe. Or if
+your laptop runs out of juice. Or if you are bored running it. Whichever comes
+first.
+
+Running the program with no arguments produces short to no output. Playing
+with the arguments makes it more useful as a study object.
+
+The first thing you should do is set the debug level. Please see debug.h and
+know that an enumeration in C starts at zero, so debug level NONE equals 0 and
+a value of 4 equals debug level ERROR. The program expects the integer value of
+the enumeration type:
+
+	storage_allocator --debug=2
+
+This will show messages at debug level ALERT and higher. The default.
+
+By default this program uses the first fit mode of operation. See the original
+text for a short explanation for this. Also available is a lousy implementation
+of the best fit mode of operation. You can set the mode by using the --mode
+option. Please think of or implement other/better modes yourself or improve
+what I've done miserably wrong in my best fit implementation as an exercise in
+learning the internals of this puppy yourself. Yes, I've deliberatly kept my
+lousy implementation, because sometimes it's important to learn from how
+something should not be done. Please don't kill me for it. And talking about
+killing. This lousy implementation also contains a stupid bug I've not yet
+put enough time in to find myself. Please see main.patch.
+
+Next you can set the amount of memory allocation slots to be used, the
+--allocations options. By default the program uses 1024 memory allocation
+slots, so theoretically a maximum of 1024 memory allocations will be in use at
+the same time. In practice this will only be half of it. See and understand
+main.c why, one of the lessons I've learned by playing with this.
+
+The last thing you can currently do is set the maximum size of a memory
+allocation, using the --size option.
+
+Sending the SIGINT signal to the program stops it in a nice fashion and you
+can also send the SIGUSR1 signal to make it report it's status.
+
+That's it. Play with it. Have fun with it. Use it, abuse it. And most of all:
+show me what I've been doing wrong!

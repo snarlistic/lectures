@@ -1,0 +1,21 @@
+<pre style="color:#000">
+/* morecore: ask system for more memory */
+static Header *morecore(unsigned nu) {
+	char *cp;
+	Header *up;
+	unsigned nalloc;
+
+	<span style="color:#00f">nalloc = sysconf(_SC_PAGESIZE) / sizeof(Header); /* minimum #units to request */</span>
+	if (nu < nalloc) {
+		nu = nalloc;
+	}
+	cp = sbrk(nu * sizeof(Header));
+	if (cp == (char *) -1) { /* no space at all */
+		return(NULL);
+	}
+	up = (Header *)cp;
+	up->s.size = nu;
+	free((void *)(up + 1));
+	return(freep);
+}
+</pre>

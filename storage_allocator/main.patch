@@ -1,0 +1,31 @@
+--- main.c-orig	2016-11-03 12:25:27.000000000 +0100
++++ main.c	2016-09-14 23:17:31.000000000 +0200
+@@ -47,6 +47,7 @@
+ 		struct sigaction sa;
+ 		void **memory;
+ 		int index, usage;
++		long counter;
+ 
+ 		sa.sa_handler = &handle_signal;
+ 		sa.sa_flags = SA_RESTART;
+@@ -63,7 +64,7 @@
+ 		memory = calloc(_saOptions.allocations, sizeof(*memory));
+ 		usage = 0;
+ 		_report = 0;
+-		for (_running = 1; _running;) {
++		for (_running = 1, counter = 0; _running; counter++) {
+ 			if (_report) {
+ 				debugPrintf(debugLevelALERT, "Request to report received: currently %d memory slots in use.\n", usage);
+ 				memorydump(debugLevelALERT, "");
+@@ -84,6 +85,11 @@
+ 				memory[index] = NULL;
+ 				usage--;
+ 			}
++			if (counter > 647200) {
++				debugPrintf(debugLevelALERT, "%ld operations processed.\n", counter);
++				debugLevelSet(debugLevelDEBUG);
++				counter = 0;
++			}
+ 		}
+ 		debugPrintf(debugLevelALERT, "Request to stop received: currently %d memory slots in use.\n", usage);
+ 		for (index = _saOptions.allocations - 1; index >= 0; index--) {

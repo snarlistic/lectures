@@ -1,0 +1,13 @@
+<pre style="color:#000">
+typedef long Align; /* for alignment to long boundary */
+
+union header { /* block header: */
+	struct {
+		union header *ptr; /* next block if on free list */
+		unsigned size; /* size of this block */
+	} s;
+	<span style="color:#00f">Align x; /* force alignment of blocks */</span>
+};
+
+typedef union header Header;
+<pre>
